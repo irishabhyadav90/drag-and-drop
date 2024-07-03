@@ -34,7 +34,6 @@ const Grid = ({ gridItems, setGridItems, arrows, onDrop }) => {
       
       const existingItem = gridItems.find(i => i.id === item.id);
       
-      console.log("stepitem", item, "gridItems", gridItems, "left", left, "top", top);
       if (existingItem) {
         setGridItems(prevItems => prevItems.map(i => 
         i.id === item.id ? { ...i, left: left, top: top } : i
