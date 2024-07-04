@@ -50,12 +50,11 @@ export default function Home() {
     const existingItem = gridItems.find((gridItem) => gridItem.id === item.id);
     if (!existingItem) {
       const newItem = {
-        ...item,
-        section: item.id.split('_')[0]
+        ...item
+        // section: item.id.split('_')[0]
       };
       setGridItems([...gridItems, newItem]);
-
-      const matchingItem = gridItems.find((gridItem) => gridItem.pointer === item.pointer && gridItem.section !== newItem.section);
+      const matchingItem = gridItems.find((gridItem) => gridItem.pointer === item.pointer && gridItem.section === newItem.section);
       if (matchingItem) {
         setArrows([...arrows, { from: matchingItem.id, to: newItem.id }]);
       }
