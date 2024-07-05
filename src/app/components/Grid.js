@@ -32,13 +32,19 @@ const Grid = ({ gridItems, setGridItems, arrows, onDrop }) => {
       const left = Math.round(item.left + delta.x);
       const top = Math.round(item.top + delta.y);
       
-      const existingItem = gridItems.find(i => i.id === item.id);
+      const existingItemFromGrid = gridItems.find(i => i.id === item.id && item?.from === 'grid' );
+      const existingItemFromTable = gridItems.find(i => i.id === item.id && !item.hasOwnProperty('from') );
       
-      if (existingItem) {
-        setGridItems(prevItems => prevItems.map(i => 
-        i.id === item.id ? { ...i, left: left, top: top } : i
-        ));
-      } else {
+      if (existingItemFromGrid) {
+        // console.log("gridItem", gridItems); 
+        const mappedItems = gridItems.map(i => 
+          i.id === item.id ? { ...i, left: left, top: top } : i
+          );
+        setGridItems(mappedItems);
+      } else if(existingItemFromTable) {
+        alert("Duplicate Item")
+      }
+       else {
         const { left: initialLeft, top: initialTop } = getNextAvailablePosition(gridItems);
         const newItem = { ...item, left: initialLeft, top: initialTop };
         setGridItems(prevItems => [...prevItems, newItem]);
@@ -150,6 +156,12 @@ const Grid = ({ gridItems, setGridItems, arrows, onDrop }) => {
     setGridItems(prevItems => prevItems.filter(item => item.id !== id));
   };
 
+  const resizeTable = (id, width, height) => {
+    // console.log("height", height, "width", width)
+    setGridItems(prevItems => prevItems.map(i =>
+      i.id === id ? { ...i, width, height } : i
+    ));
+  };
 
   return (
     <div 
@@ -168,6 +180,7 @@ const Grid = ({ gridItems, setGridItems, arrows, onDrop }) => {
           moveTable={moveTable}
           index={index}
           removeTable={removeTable}
+          resizeTable={resizeTable}
         />
       ))}
     </div>
